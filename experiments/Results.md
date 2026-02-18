@@ -33,12 +33,10 @@ A balanced subset of the training set ($10\%$) was created and used to finetune 
 
 The final model was fine-tuned with CoT for **Task 1: Clarity** and Definition-aware technique for **Task 2: Evasion**.
 
-| Task                   |	Metric |	Score |
-| ------                 | --------- | --------- |
-| Clarity Classification - base model |	Macro F1 |	0.0883 |
-| Clarity Classification - finetuned model |	Macro F1 |	0.5187 |
-| Evasion Technique Classification - base model |	Macro F1 |	0.1275 |
-| Evasion Technique Classification - finetuned model |	Macro F1 |	0.3504 |
+| Task | Base Model F1 | Fine-Tuned F1 | Improvement |
+| :--- | :--- | :--- | :--- |
+| **Clarity** | 0.0883 | **0.5187** | **+487%** |
+| **Evasion** | 0.1275 | **0.3504** | **+174%** |
 
 ## President and Interview Date
 
