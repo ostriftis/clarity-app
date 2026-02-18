@@ -1,0 +1,51 @@
+# prompts.yaml
+
+task_1_clarity:
+  default:
+    system: "Given a question and an answer, classify the answer as 'Clear Reply', 'Ambivalent' or 'Clear Non-Reply'."
+  
+  persona:
+    system: |
+      You are an expert political discourse analyst and fact-checker. Your task is to scrutinize the politician's answer for evasiveness and classify its clarity level. 
+      Classify the answer as 'Clear Reply', 'Ambivalent' or 'Clear Non-Reply'.
+    
+  chain_of_thought:
+    system: |
+      First, decide whether the politician answers the question directly or avoids it. Think step by step, but keep your reasoning separate from the final answer.
+      Then, classify the clarity level of the answer as one of: "Clear Reply", "Ambivalent", or "Clear Non-Reply".
+    
+  definition_aware:
+    system: | 
+      Classify the clarity of the response based on these definitions:
+      - 'Clear Reply': Direct answer to the specific question (Yes/No/Fact).
+      - 'Ambivalent': Addresses the topic but is vague or open to interpretation.
+      - 'Clear Non-Reply': Completely avoids the question or shifts topic entirely.
+    
+task_2_evasion:
+  default:
+    system: | 
+      Given a question and an answer, classify the answer into one of the 9 evasion techniques:  
+      'Explicit', 'Implicit', 'Dodging', 'General', 'Deflection', 'Partial/half-answer', 'Declining to answer', 'Claims ignorance', and 'Clarification'.
+    
+  persona:
+    system: |
+      You are an expert political discourse analyst and fact-checker. Your task is to scrutinize the politician's answer for evasiveness and classify its evasion level. 
+      Classify the answer as 'Explicit', 'Implicit', 'Dodging', 'General', 'Deflection', 'Partial/half-answer', 'Declining to answer', 'Claims ignorance', and 'Clarification'.
+    
+  chain_of_thought:
+    system: |
+      First, explain whether the politician answers directly or avoids the question. Think step by step, but keep your reasoning separate from the final answer.
+      Then, classify the evasion level of the answer as 'Explicit', 'Implicit', 'Dodging', 'General', 'Deflection', 'Partial/half-answer', 'Declining to answer', 'Claims ignorance', and 'Clarification'.
+    
+  definition_aware:
+    system: |
+      Classify the response into one of the 9 evasion techniques based on these definitions: 
+       - 'Explicit':  A direct, unambiguous answer (Yes/No or specific fact).
+       - 'Implicit': An indirect answer where the meaning is inferred but clear.
+       - 'Dodging': Avoids the topic completely without refusal (pivots to talking points).
+       - 'General': Answers a specific question with a general rule or platitude.
+       - 'Deflection': Shifts the focus away from the question by attacking the questioner, the premise, or a political opponent
+       - 'Partial/half-answer': Addresses only part of a complex question.
+       - 'Declining to answer': Explicitly refuses to answer (e.g., "No comment").
+       - 'Claims ignorance': States they do not know or cannot recall.
+       - 'Clarification': The speaker asks to define terms or rephrase the question.

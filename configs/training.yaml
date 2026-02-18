@@ -1,0 +1,20 @@
+# train.yaml
+
+training_args:
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 4
+  warmup_steps: 5
+  num_train_epochs: 1
+  learning_rate: 2e-4
+  logging_steps: 1
+  optim: "adamw_8bit"
+  weight_decay: 0.01
+  lr_scheduler_type: "linear"
+  seed: 21
+  output_dir: "outputs"
+  report_to: "none"
+
+# for multitask
+techniques:
+  task_1_clarity: "chain_of_thought"
+  task_2_evasion: "definition_aware"

@@ -1,0 +1,22 @@
+# evalutation.yaml
+
+evaluation:
+  task_1_clarity: "chain_of_thought"
+  task_2_evasion: "definition_aware"
+
+valid_labels:
+  task_1_clarity:
+    - "Clear Reply"
+    - "Ambivalent"
+    - "Clear Non-Reply"
+  task_2_evasion:
+    - "Explicit"
+    - "Implicit"
+    - "Dodging"
+    - "General"
+    - "Deflection"
+    - "Partial/half-answer"
+    - "Declining to answer"
+    - "Claims ignorance"
+    - "Clarification"
+
