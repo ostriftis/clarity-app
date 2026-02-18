@@ -21,6 +21,7 @@ LORA_OUT = ROOT_DIR / "models" / "lora" /"new_lora"
 TRAIN_CONFIG = ROOT_DIR / "configs" / "training.yaml"
 EVAL_CONFIG = ROOT_DIR / "configs" / "evaluation.yaml"
 PROMPTS_CONFIG = ROOT_DIR / "configs" / "prompts.yaml"
+INFER_CONFIG = ROOT_DIR / "configs" / "inference.yaml"
 
 def load_yaml(yaml_path=""):
     with open(yaml_path, "r") as f:
@@ -84,13 +85,15 @@ def main():
         dataset = load_dataset("ailsntua/QEvasion")
 
         techniques = training_config.get('techniques', {})
-        
+        task_map = training_config.get('task_mapping', {})
+        technique = args.technique if args.technique is not None else techniques[task_map[args.task]]
+
         training_dataset = None
         model, tokenizer = get_model_and_tokenizer_training()
         if args.task == 'multi_task':
             training_dataset = transform_multitask(dataset, techniques, tokenizer)
         else:
-            training_dataset = transform_dataset_task(dataset, args.task, args.technique,
+            training_dataset = transform_dataset_task(dataset, task_map[args.task], technique,
                                          tokenizer)
 
 
@@ -142,13 +145,15 @@ def main():
         
         # load prompt
         evaluation_config = load_yaml(EVAL_CONFIG)
-        technique = evaluation_config['evaluation'][args.task]
-        valid_labels = evaluation_config['valid_labels'].get(args.task, [])
+        task_map = evaluation_config.get('task_mapping', {})
+        technique = evaluation_config['evaluation'][task_map[args.task]] if args.technique is None else args.technique
+        valid_labels = evaluation_config['valid_labels'].get(task_map[args.task], [])
+
 
         print("Begining evaluation on test dataset")
         results = evaluate_model_on_dataset(
             test_dataset = test_dataset,
-            task_type=args.task,
+            task_type=task_map[args.task],
             technique=technique,
             model=model,
             tokenizer=tokenizer,
@@ -184,8 +189,9 @@ def main():
         a = "A " + a
 
 
-        evaluation_config = load_yaml(EVAL_CONFIG)
-        technique = evaluation_config['evaluation'][args.task]
+        inference_config = load_yaml(INFER_CONFIG)
+        task_map = inference_config['task_mapping']
+        technique = inference_config[task_map[args.task]]
 
         prediction = predict_label(
             question=q,
@@ -193,7 +199,7 @@ def main():
             president=p,
             date=d,
             technique=technique,
-            task_type=args.task,
+            task_type=task_map[args.task],
             model=model,
             tokenizer=tokenizer,
         )

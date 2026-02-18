@@ -35,7 +35,7 @@ The final model was fine-tuned with CoT for **Task 1: Clarity** and Definition-a
 | Task    | Prompting technique | F1-Score (macro) |
 | ----------- | ----------- | ----------- |
 | **Clarity**            | CoT      | 0.5187      |
-| **Evasion**            | Definition-aware        | 0.2713        |
+| **Evasion**            | Definition-aware        | 0.3504        |
 
 
 ## Reproducibility
