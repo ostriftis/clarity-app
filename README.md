@@ -77,8 +77,13 @@ graph LR
     class Unsloth,Mistral,LoRA model;
 ```
 
-## Approach
-This project implements a full ML pipeline for both CLARITY tasks, including training, evaluation, inference, and deployment.
+## Model & Optimization
+
+- **Base model:** Mistral-7b-instruct (4bit)
+- **Fine‑tuning**: LoRA (4‑bit quantization)
+- **Library**: Unsloth
+- **Training**: 3 epochs
+- **Hardware‑efficient**: QLoRA + 4‑bit quantization
 
 Why Mistral-7B-Instruct?
 Mistral-7B-Instruct-v0.3 was selected as the foundational model for three key reasons:
@@ -89,13 +94,6 @@ Mistral-7B-Instruct-v0.3 was selected as the foundational model for three key re
 3. Efficiency: Mistral-7B offers reasoning capabilities often found in 30B+ parameter models, allowing us to keep
   the system responsive and deployable on single-GPU consumer hardware. Furthermore, the SWA reduces computational complexity on inference.
 
-
-## Model
-- **Base model:** Mistral-7b-instruct (4bit)
-- **Fine‑tuning**: LoRA (4‑bit quantization)
-- **Library**: Unsloth
-- **Training**: 3 epochs
-- **Hardware‑efficient**: QLoRA + 4‑bit quantization
 
 ## Code structure
 ```
@@ -206,6 +204,7 @@ The project automatically loads models from:
 models/base/   # Pretrained model (cached)
 models/lora/   # Fine‑tuned LoRA adapters
 ```
+
 
 
 
