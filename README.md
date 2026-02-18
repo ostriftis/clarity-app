@@ -28,6 +28,15 @@ when both levels are modeled jointly.
 
 ## System Architecture
 This project implements a full-stack pipeline designed for low-latency inference on consumer hardware. The system orchestrates a Next.js frontend, a FastAPI inference server, and an optimized Mistral-7B model using Docker Compose.
+```mermaid
+graph LR
+    User --> Frontend
+    Frontend --> Backend
+    Backend --> Model
+    Model --> Backend
+    Backend --> Frontend
+    Frontend --> User
+```
 
 ```mermaid
 graph LR
@@ -210,6 +219,7 @@ The project automatically loads models from:
 models/base/   # Pretrained model (cached)
 models/lora/   # Fine‑tuned LoRA adapters
 ```
+
 
 
 
