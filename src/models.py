@@ -1,5 +1,4 @@
-from unsloth import FastLanguageModel, AutoModelForCausalLM, AutoTokenizer
-import os
+from unsloth import FastLanguageModel
 from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
@@ -36,7 +35,7 @@ def get_model_and_tokenizer_training(model_name="unsloth/mistral-7b-instruct-v0.
         use_rslora = False,
         loqftq_config = None,
     )
-    if save:
+    if save and load_target != model_path:
         print(f"Saving model to {output_dir}...")
         model.save_pretrained(output_dir)
         tokenizer.save_pretrained(output_dir) # Don't forget the tokenizer!
@@ -49,7 +48,7 @@ def get_model_and_tokenizer_inference(model_name="unsloth/mistral-7b-instruct-v0
     Returns: (model, tokenizer) tuple
     """
     load_target = model_path if (model_path and os.path.exists(model_path)) else model_name
-    print(f"Loading model from: {load_target}")
+    
     model, tokenizer = FastLanguageModel.from_pretrained(
         model_name = load_target,
         max_seq_length = max_seq_length,
@@ -59,7 +58,7 @@ def get_model_and_tokenizer_inference(model_name="unsloth/mistral-7b-instruct-v0
 
     FastLanguageModel.for_inference(model)
     
-    if save:
+    if save and load_target != model_path:
         print(f"Saving model to {output_dir}...")
         model.save_pretrained(output_dir)
         tokenizer.save_pretrained(output_dir)

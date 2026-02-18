@@ -1,0 +1,21 @@
+FROM nvidia/cuda:12.1.1-runtime-ubuntu22.04
+
+# Install Python and pip
+RUN apt-get update && apt-get install -y python3.10 python3-pip
+
+WORKDIR /app
+
+# Copy API requirements first to leverage Docker cache
+COPY api/requirements.txt .
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+# Copy the necessary source code, API, and models
+COPY src/ /app/src/
+COPY api/ /app/api/
+COPY models/ /app/models/
+
+# Expose FastAPI port
+EXPOSE 8000
+
+# Run the Uvicorn server
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]

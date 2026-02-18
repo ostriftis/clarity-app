@@ -1,4 +1,4 @@
-# Experiments on prompt techniques
+# Experiments on prompting techniques
 Four different prompting techniques were evaluated before the final finetuning:
 - **Default**: The model is prompted to classify the answer to the corresponding categories.
 - **CoT**: The model is instructed to decide which category the answer belongs to, think step by step and not include the reasoning in the answer. Then it classifies the answer. 
@@ -32,6 +32,11 @@ A balanced subset of the training set ($10\%$) was created and used to finetune 
 ## Conclusion
 
 The final model was fine-tuned with CoT for **Task 1: Clarity** and Definition-aware technique for **Task 2: Evasion**.
+| Task    | Prompting technique | F1-Score (macro) |
+| ----------- | ----------- | ----------- |
+| **Clarity**            | CoT      | 0.5187      |
+| **Evasion**            | Definition-aware        | 0.2713        |
+
 
 ## Reproducibility
 

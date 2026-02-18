@@ -1,0 +1,4 @@
+# inference.yaml
+
+task_1_clarity: "chain_of_thought"
+task_2_evasion: "definition_aware"

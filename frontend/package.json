@@ -1,0 +1,22 @@
+{
+  "name": "clarity-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
+    "next": "latest",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwindcss": "^4.1.18"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.24",
+    "daisyui": "^5.5.18",
+    "postcss": "^8.5.6"
+  }
+}

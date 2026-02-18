@@ -1,28 +1,56 @@
 version: "3.9"
 
 services:
-  clarity-app:
+  # Your existing environment for training/eval via main.py
+  clarity-cli:
     build:
       context: .
       dockerfile: deploy/Dockerfile
-
-    container_name: clarity-app
-
+    container_name: clarity-cli
     deploy:
       resources:
         reservations:
           devices:
             - capabilities: [gpu]
-
     volumes:
       - .:/app
       - ./models:/models
-
     entrypoint: ["python", "main.py"]
+    environment:
+      PYTHONUNBUFFERED: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+    stdin_open: true
+    tty: true
 
+  # The new FastAPI deployment
+  clarity-api:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.api
+    container_name: clarity-api
+    ports:
+      - "8000:8000"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+    volumes:
+      - .:/app
+      - ./models:/models
+    # Overrides the Dockerfile CMD to enable hot-reloading for development
+    command: ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
     environment:
       PYTHONUNBUFFERED: "1"
       PYTHONDONTWRITEBYTECODE: "1"
 
-    stdin_open: true
-    tty: true
+  # The new Frontend UI
+  clarity-frontend:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.frontend
+    container_name: clarity-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - clarity-api

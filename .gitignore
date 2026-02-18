@@ -5,3 +5,6 @@ unsloth_compiled_cache/
 models/lora/*
 models/base/*
 models/checkpoints/*
+.next/
+node_modules/
+package-lock.json

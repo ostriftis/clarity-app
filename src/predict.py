@@ -1,4 +1,16 @@
-from dataset import load_prompts
+import sys
+import os
+
+# 1. Get the absolute path of the current file's directory
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# 2. Go up two levels (from api/routers/ or api/services/ up to project-root/)
+project_root = os.path.abspath(os.path.join(current_dir, "../"))
+
+# 3. Add the project root to Python's internal path
+sys.path.append(project_root)
+
+from src.dataset import load_prompts
 from tqdm import tqdm
 
 def predict_label(question, answer, president, date, task_type, technique, model, tokenizer):
