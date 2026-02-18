@@ -32,12 +32,25 @@ A balanced subset of the training set ($10\%$) was created and used to finetune 
 ## Conclusion
 
 The final model was fine-tuned with CoT for **Task 1: Clarity** and Definition-aware technique for **Task 2: Evasion**.
-| Task    | Prompting technique | F1-Score (macro) |
-| ----------- | ----------- | ----------- |
-| **Clarity**            | CoT      | 0.5187      |
-| **Evasion**            | Definition-aware        | 0.3504        |
 
+| Task                   |	Metric |	Score |
+| ------                 | --------- | --------- |
+| Clarity Classification - base model |	Macro F1 |	0.0883 |
+| Clarity Classification - finetuned model |	Macro F1 |	0.5187 |
+| Evasion Technique Classification - base model |	Macro F1 |	0.1275 |
+| Evasion Technique Classification - finetuned model |	Macro F1 |	0.3504 |
+
+## President and Interview Date
+
+Below we can see the effects of providing information about which president answered the question and when the interview was conducted:
+
+| Task   |	None Provided |	Both Provided |
+| ------ | --------- | --------- |
+| Clarity |	0.5072 |	**0.5187** |
+| Evasion |	 0.3326 |	**0.3504** |
+
+It is apparent that providing these types of information improves classification f1-Score for both tasks.
 
 ## Reproducibility
 
-The notebooks in this file were used to do these experiments. You can also run it locally by following the instructions on README.md.
+The notebooks in this file were used to do these experiments. You can also run it locally by following the instructions on [README.md](README.md).

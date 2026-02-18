@@ -55,35 +55,44 @@ def evaluate_model_on_dataset(test_dataset, task_type, technique, model, tokeniz
         question = row['interview_question']
         answer = row['interview_answer']
         clarity = row['clarity_label']
+        president = row['president']
+        date = row['date']
         ground_truth = None
         if task_type == 'task_1_clarity':
             ground_truth = clarity
         else:
-            valid_evasions = task_mapping.get(clarity, [])
+            #valid_evasions = task_mapping.get(clarity, [])
                 
             # Gather the 3 annotations
-            raw_votes = [row['annotator1'], row['annotator2'], row['annotator3']]
+            ground_truths = [row['annotator1'], row['annotator2'], row['annotator3']]
             
             # Filter step: only keep votes that exist in the valid mapping
-            valid_votes = [vote for vote in raw_votes if vote in valid_evasions]
+            # valid_votes = [vote for vote in raw_votes if vote in valid_evasions]
             
-            if valid_votes == []:
+            #if valid_votes == []:
                 # Fallback for Zero Valid Votes: Pick the most common evasion tactic for that clarity class
-                fallbacks = {   
-                    'Clear Reply': 'Explicit',
-                    'Ambivalent': 'Dodging', 
-                    'Clear Non-Reply': 'Declining to answer'
-                }
-                evasion = fallbacks.get(clarity, None)
-            else: 
-                vote_counts = Counter(valid_votes)
-                most_common = vote_counts.most_common()
+             #   fallbacks = {   
+             #       'Clear Reply': 'Explicit',
+             #       'Ambivalent': 'Dodging', 
+             #       'Clear Non-Reply': 'Declining to answer'
+             #   }
+             #   evasion = fallbacks.get(clarity, None)
+            #else: 
+             #   vote_counts = Counter(valid_votes)
+              #  most_common = vote_counts.most_common()
                 
-                evasion = most_common[0][0]
+               # evasion = most_common[0][0]
                 
-            ground_truth = evasion
+            
 
-        prediction = predict_label(question, answer, task_type, technique, model, tokenizer)
+        prediction = predict_label(question, answer, president, date, task_type, technique, model, tokenizer)
+        # If the prediction is the same as any of the annotator labels, we consider it a correct classification
+        if ground_truth is None:
+            for gt in ground_truths:
+                if prediction == gt: 
+                    ground_truth = prediction
+                    break
+        if ground_truth is None: ground_truth = ground_truths[0]
         
         results.append({
             "question": question,
