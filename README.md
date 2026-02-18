@@ -77,23 +77,29 @@ graph LR
     class Unsloth,Mistral,LoRA model;
 ```
 
+
 ## Model & Optimization
+* **Base Architecture:** Mistral-7B-Instruct-v0.3
+* **Optimization Technique:** QLoRA (Quantized Low-Rank Adapters)
+* **Library:** Unsloth (optimized for 2x faster training and 60% less VRAM usage).
+* **Training Infrastructure:** * Trained on **Kaggle Notebooks (NVIDIA Tesla T4)** to demonstrate accessibility.
+    * Fine-tuning completed in 9 hours for 3 epochs.
 
-- **Base model:** Mistral-7b-instruct (4bit)
-- **Fine‑tuning**: LoRA (4‑bit quantization)
-- **Library**: Unsloth
-- **Training**: 3 epochs
-- **Hardware‑efficient**: QLoRA + 4‑bit quantization
-
-Why Mistral-7B-Instruct?
+_Why Mistral-7B-Instruct?_
 Mistral-7B-Instruct-v0.3 was selected as the foundational model for three key reasons:
-1. Hierarchical Schema Alignment: The CLARITY task demands strict adherence to a two-level taxonomy (ambiguity detection $\rightarrow$ 9 distinct evasion strategies).
-  Mistral-7B-Instruct demonstrates superior capability in mapping complex rhetorical nuances to specific class labels and at the same time it is optimized to strictly respect system prompts.
-2. Long-Context Handling: Political interviews often involve long-winded answers where the "evasion" happens in subtle spots. Mistral's Sliding Window Attention (SWA)
+1. **Hierarchical Schema Alignment**: The CLARITY task demands strict adherence to a two-level taxonomy (ambiguity detection $\rightarrow$ 9 distinct evasion strategies).
+  Mistral-7B-Instruct demonstrates superior capability in mapping complex rhetorical nuances to specific class labels while strictly respecting system prompts.
+2. **Long-Context Handling**: Political interviews often involve long-winded answers where the "evasion" happens in subtle spots. Mistral's **Sliding Window Attention (SWA)**
    mechanism allows it to maintain coherence over these longer sequences and focus on local context, crucial for text classification.
-3. Efficiency: Mistral-7B offers reasoning capabilities often found in 30B+ parameter models, allowing us to keep
+3. **Efficiency**: Mistral-7B offers reasoning capabilities competitive with 30B+ parameter models, allowing us to keep
   the system responsive and deployable on single-GPU consumer hardware. Furthermore, the SWA reduces computational complexity on inference.
 
+_Why QLoRA?_
+I employed **4-bit NormalFloat (NF4) quantization** to freeze the pretrained model weights, injecting trainable Low-Rank Adapters. This reduces memory usage by ~65% while maintaining 16-bit full
+fine-tuning performance, preventing "catastrophic forgetting" of the model's general reasoning abilities.
+
+### Hardware Requirements
+* **Inference:** Requires a GPU with at least **6GB VRAM**. The system uses 4-bit quantization to fit entirely within consumer-grade memory.
 
 ## Code structure
 ```
@@ -204,6 +210,7 @@ The project automatically loads models from:
 models/base/   # Pretrained model (cached)
 models/lora/   # Fine‑tuned LoRA adapters
 ```
+
 
 
 
