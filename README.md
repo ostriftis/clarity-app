@@ -86,4 +86,46 @@ A top‑level docker-compose.yml orchestrates:
 
 This enables one‑command deployment of the entire system.
 
-## Instructions
+## How to run
+### Local setup
+If you want to run training/evaluation scripts locally:
+```bash
+git clone https://github.com/ostriftis/clarity-app.git
+cd clarity-app
+
+python3 -m venv venv ## conda environments are also suggested 
+source venv/bin/activate
+
+pip install --upgrade pip
+# setup.sh needs execution rights
+./setup.sh
+```
+### CLI commands examples:
+```python
+python main.py train --task clarity --technique chain_of_thought --output_dir models/lora
+python main.py evaluate --task evasion --model_path models/base --lora_path models/lora
+python main.py predict --task clarity --question "..." --answer "..."
+```
+See [cli_guide.md] for more.
+
+### Docker
+In order to start all services at the same time:
+```bash
+docker compose build
+docker compose up --build
+```
+
+Keep in mind that gpu with at least 6GB VRAM is needed in order to load the model.
+
+Terminate:
+```bash
+docker compose down
+```
+
+### Model Management
+The project automatically loads models from:
+```
+models/base/   # Pretrained model (cached)
+models/lora/   # Fine‑tuned LoRA adapters
+```
+
