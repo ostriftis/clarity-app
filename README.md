@@ -1,5 +1,6 @@
-# CLARITY‑LLM: Detecting Ambiguity & Evasion in Political Discourse
-_A full-stack ML system for the SemEval 2026 CLARITY Task_
+# CLARITY-LLM: Political Evasion Detection with Mistral-7b & QLoRA
+_A full-stack ML system for the [SemEval 2026 CLARITY Task](https://konstantinosftw.github.io/CLARITY-SemEval-2026/)_
+
 
 ## Overview
 Political communication is often intentionally ambiguous. In high‑stakes settings such as 
@@ -25,8 +26,69 @@ use to avoid giving a direct answer.
 This hierarchical framing enables deeper discourse analysis and has been shown to improve classification performance
 when both levels are modeled jointly.
 
+## System Architecture
+This project implements a full-stack pipeline designed for low-latency inference on consumer hardware. The system orchestrates a Next.js frontend, a FastAPI inference server, and an optimized Mistral-7B model using Docker Compose.
+
+```mermaid
+graph LR
+    %% Define Nodes inside Subgraphs
+    subgraph User_Layer [User Interaction]
+        direction TB
+        U([User])
+    end
+
+    subgraph Docker_Eco [Docker Compose Ecosystem]
+        direction TB
+        
+        subgraph FE [Frontend Container]
+            Next[Next.js UI]
+        end
+
+        subgraph BE [Backend Container]
+            API[FastAPI Server]
+            Logic[Preprocessing & Prompting]
+        end
+
+        subgraph Model_Engine [Inference Engine]
+            Unsloth[Unsloth Library]
+            Mistral[Mistral-7B-Instruct]
+            LoRA[LoRA Adapters]
+        end
+    end
+
+    %% Data Flow Connections
+    U -->|Input QA Pair| Next
+    Next -->|REST API Request| API
+    API -->|Raw Text| Logic
+    Logic -->|Formatted Prompt| Unsloth
+    Unsloth -->|Accelerated Inference| Mistral
+    Mistral -.->|Active Adapter| LoRA
+    Mistral -->|Prediction| API
+    API -->|JSON Response| Next
+    Next -->|Display Result| U
+
+    %% Styling (Applied at the end to prevent errors)
+    classDef container fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000;
+    classDef model fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#000;
+    classDef user fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,color:#000;
+
+    class U user;
+    class Next,API,Logic container;
+    class Unsloth,Mistral,LoRA model;
+```
+
 ## Approach
 This project implements a full ML pipeline for both CLARITY tasks, including training, evaluation, inference, and deployment.
+
+Why Mistral-7B-Instruct?
+Mistral-7B-Instruct-v0.3 was selected as the foundational model for three key reasons:
+1. Hierarchical Schema Alignment: The CLARITY task demands strict adherence to a two-level taxonomy (ambiguity detection $\rightarrow$ 9 distinct evasion strategies).
+  Mistral-7B-Instruct demonstrates superior capability in mapping complex rhetorical nuances to specific class labels and at the same time it is optimized to strictly respect system prompts.
+2. Long-Context Handling: Political interviews often involve long-winded answers where the "evasion" happens in subtle spots. Mistral's Sliding Window Attention (SWA)
+   mechanism allows it to maintain coherence over these longer sequences and focus on local context, crucial for text classification.
+3. Efficiency: Mistral-7B offers reasoning capabilities often found in 30B+ parameter models, allowing us to keep
+  the system responsive and deployable on single-GPU consumer hardware. Furthermore, the SWA reduces computational complexity on inference.
+
 
 ## Model
 - **Base model:** Mistral-7b-instruct (4bit)
@@ -50,16 +112,32 @@ deploy/
 │── Dockerfile       # Training/inference image
 ```
 
-## Results
+## Methodology
+To determine the optimal fine-tuning strategy, an ablation study was conducted on a balanced 10% subset of the training data. Four prompting paradigms: **Default**, **Persona** (Role-playing), **Chain-of-Thought (CoT)**, and **Definition-Aware** were evaluated.
 
+### Key Findings
+Experiments revealed that different levels of discourse analysis require different inductive biases:
 
-| Task                   |	Metric |	Score |
-| ------                 | --------- | --------- |
-| Clarity Classification |	Macro F1 |	0.5187 |
-| Evasion Technique Classification |	Macro F1 |	0.3504 |
+1.  **Task 1 (Clarity): Reasoning is Key.**
+    * **Winner:** Chain-of-Thought (CoT)
+    * **Insight:** Determining whether an answer is "ambiguous" requires logical inference. CoT allowed the model to generate intermediate reasoning steps, significantly outperforming standard prompting.
 
-These results reflect the difficulty of the task—fine‑grained evasion detection is 
-significantly more challenging due to subtle rhetorical cues and class imbalance.
+2.  **Task 2 (Evasion): Definitions are Key.**
+    * **Winner:** Definition-Aware
+    * **Insight:** The 9 evasion strategies (e.g., "Prophylactic," "Polite Correction") are subtle academic constructs. The model performed best when explicitly grounded in the definitions of these classes during training, rather than relying on internal parametric knowledge.
+
+### Impact of Fine-Tuning
+Applying these optimized strategies to the full dataset yielded massive performance gains over the base model baseline:
+
+| Task | Base Model F1 | Fine-Tuned F1 | Improvement |
+| :--- | :--- | :--- | :--- |
+| **Clarity** | 0.0883 | **0.5187** | **+487%** |
+| **Evasion** | 0.1275 | **0.3504** | **+174%** |
+
+These results reflect the difficulty of the task—fine‑grained evasion detection is significantly more challenging due to subtle rhetorical cues and class imbalance.
+
+*Full experimental logs and ablation tables can be found in [experiments/Results.md](experiments/Results.md).*
+
 
 ## Full-stack Deployment
 ### Backend - FastAPI
@@ -106,7 +184,7 @@ python main.py train --task clarity --technique chain_of_thought --output_dir mo
 python main.py evaluate --task evasion --model_path models/base --lora_path models/lora
 python main.py predict --task clarity --question "..." --answer "..."
 ```
-See the [CLI Guide](cli-guide.md) for full usage.
+_See the [CLI Guide](cli-guide.md) for full usage._
 
 ### Docker
 In order to start all services at the same time:
@@ -128,5 +206,6 @@ The project automatically loads models from:
 models/base/   # Pretrained model (cached)
 models/lora/   # Fine‑tuned LoRA adapters
 ```
+
 
 
