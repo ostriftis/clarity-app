@@ -106,7 +106,7 @@ python main.py train --task clarity --technique chain_of_thought --output_dir mo
 python main.py evaluate --task evasion --model_path models/base --lora_path models/lora
 python main.py predict --task clarity --question "..." --answer "..."
 ```
-See [cli_guide.md] for more.
+See the [CLI Guide](cli-guide.md) for full usage.
 
 ### Docker
 In order to start all services at the same time:
@@ -128,4 +128,5 @@ The project automatically loads models from:
 models/base/   # Pretrained model (cached)
 models/lora/   # Fine‑tuned LoRA adapters
 ```
+
 
