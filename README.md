@@ -83,7 +83,7 @@ graph TD
 * **Base Architecture:** Mistral-7B-Instruct-v0.3
 * **Optimization Technique:** QLoRA (Quantized Low-Rank Adapters)
 * **Library:** Unsloth (optimized for 2x faster training and 60% less VRAM usage).
-* **Training Infrastructure:** * Trained on **Kaggle Notebooks (NVIDIA Tesla T4)** to demonstrate accessibility.
+* **Training Infrastructure:** Trained on **Kaggle Notebooks (NVIDIA Tesla T4)** to demonstrate accessibility.
     * Fine-tuning completed in 9 hours for 3 epochs.
 
 _Why Mistral-7B-Instruct?_
@@ -96,7 +96,7 @@ Mistral-7B-Instruct-v0.3 was selected as the foundational model for three key re
   the system responsive and deployable on single-GPU consumer hardware. Furthermore, the SWA reduces computational complexity on inference.
 
 _Why QLoRA?_
-I employed **4-bit NormalFloat (NF4) quantization** to freeze the pretrained model weights, injecting trainable Low-Rank Adapters. This reduces memory usage by ~65% while maintaining 16-bit full
+I employed **4-bit quantization** to freeze the pretrained model weights, injecting trainable Low-Rank Adapters. This reduces memory usage by ~65% while maintaining 16-bit full
 fine-tuning performance, preventing "catastrophic forgetting" of the model's general reasoning abilities.
 
 ### Hardware Requirements
@@ -211,6 +211,7 @@ The project automatically loads models from:
 models/base/   # Pretrained model (cached)
 models/lora/   # Fine‑tuned LoRA adapters
 ```
+
 
 
 
