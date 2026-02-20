@@ -51,6 +51,8 @@ services:
       dockerfile: deploy/Dockerfile.frontend
     container_name: clarity-frontend
     ports:
-      - "80:80"
+      - "3000:3000" # Changed to 3000 to match typical Next.js dev/prod defaults
     depends_on:
       - clarity-api
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000

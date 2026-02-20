@@ -1,4 +1,0 @@
-@import "tailwindcss";
-
-/* This is how you load DaisyUI in Tailwind v4 */
-@plugin "daisyui";

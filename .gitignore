@@ -8,3 +8,8 @@ models/checkpoints/*
 .next/
 node_modules/
 package-lock.json
+
+frontend1
+\[root-of-the-server]__4edce685._.js
+\[root-of-the-server]__4edce685._.js.map
+\[turbopack-node]_transforms_postcss_ts_94b22576._.js
