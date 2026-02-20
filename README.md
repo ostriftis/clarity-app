@@ -152,6 +152,8 @@ These results reflect the difficulty of the task—fine‑grained evasion detect
 - Designed for low‑latency, GPU‑accelerated serving
 
 ### Frontend - React / Next.js
+<img width="909" height="752" alt="image" src="https://github.com/user-attachments/assets/773b2d47-2a53-48b7-b5c3-ab403176ef45" />
+
 - Clean UI for entering QA pairs
 - Displays clarity and evasion technique prediction labels
 - Communicates with the FastAPI backend via REST
@@ -211,6 +213,7 @@ The project automatically loads models from:
 models/base/   # Pretrained model (cached)
 models/lora/   # Fine‑tuned LoRA adapters
 ```
+
 
 
 
