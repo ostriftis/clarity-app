@@ -50,11 +50,11 @@ export default function Home() {
     <div style={{ backgroundColor: deepBlue, minHeight: '100vh', display: 'flex', alignItems: 'center', padding: '20px' }}>
       <Container style={{ maxWidth: '800px', backgroundColor: containerBlue, padding: '40px', borderRadius: '15px', color: '#ffffff', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
         <h2 className="mb-4 text-center fw-bold">Clarity - Political Evasion Detection</h2>
-        <p className="text-left"> Provide a question and answer given by a politician and (optionally) the politician's name and the date the question was conducted. </p>
-        
+        <p className="text-left"> Paste a transcript below to detect political evasion. 
+                        Provide the question and the answer given; optionally, include the politician's name and the date for more context.
+                             </p>
 
-        <p className="text-left"> Clarity will then decide if his/her answer was clear. </p>
-
+        <p> Clarity will then analyze the response for evasive patterns</p>
         <Form onSubmit={handleSubmit}>
           
           <Form.Group className="mb-3 d-flex flex-column text-start">
